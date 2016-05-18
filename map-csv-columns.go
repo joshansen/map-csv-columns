@@ -55,7 +55,7 @@ func (c *Converter) SetOutputWithFilename(filename string) error {
 //Converts an input csv file into an output file, mapping column names given in FieldMap
 func (c *Converter) Convert() error {
 	//Fix csv issue with mac cr with macreader
-	r := csv.NewReader(macreader.New(c.ReadFile))
+	r := csv.NewReader(macreader.New(c.Input))
 
 	//Read the first row
 	firstRow, err := r.Read()
@@ -116,7 +116,7 @@ func (c *Converter) Convert() error {
 	}
 
 	//write new csv file
-	w := csv.NewWriter(c.WriteFile)
+	w := csv.NewWriter(c.Output)
 	if err := w.WriteAll(convertedCSV); err != nil {
 		return err
 	}
