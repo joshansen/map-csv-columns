@@ -10,47 +10,52 @@ import (
 	"github.com/ctessum/macreader"
 )
 
+//The Converter type hold the field map, the input io.Reader and the output io.Writer
 type Converter struct {
-	FieldMap  map[string]string
-	ReadFile  io.Reader
-	WriteFile io.Writer
+	FieldMap map[string]string
+	Input    io.Reader
+	Output   io.Writer
 }
 
-//Creates a new converter taking two file names and a field map
-func NewConverter(readFile, writeFile string, FieldMap map[string]string) (*Converter, error) {
-	c := &Converter{FieldMap: FieldMap}
-	if err := c.setReadFile(readFile); err != nil {
-		return nil, err
-	}
-	if err := c.setWriteFile(writeFile); err != nil {
-		return nil, err
-	}
-	return c, nil
+//Creates a new converter.
+func NewConverter(FieldMap map[string]string) *Converter {
+	return &Converter{FieldMap: FieldMap}
 }
 
-//Sets ReadFile on converter given a file name.
-func (c *Converter) setReadFile(filename string) error {
+//Sets Converter Input
+func (c *Converter) SetInput(input io.Reader) {
+	c.Input = input
+}
+
+//Sets Converter Output
+func (c *Converter) SetOutput(output io.Reader) {
+	c.Output = input
+}
+
+//Sets Converter Input by opening a file with filname.
+func (c *Converter) SetInputWithFilename(filename string) error {
 	file, err := os.Open(filename)
 	if err != nil {
 		return err
 	}
-	c.ReadFile = macreader.New(file)
+	c.Input = file
 	return nil
 }
 
-//Sets WriteFile on converter given a file name.
-func (c *Converter) setWriteFile(filename string) error {
+//Sets Converter Output by creating a file with filname.
+func (c *Converter) SetOutputWithFilename(filename string) error {
 	file, err := os.Create(filename)
 	if err != nil {
 		return err
 	}
-	c.WriteFile = file
+	c.Output = file
 	return nil
 }
 
 //Converts an input csv file into an output file, mapping column names given in FieldMap
 func (c *Converter) Convert() error {
-	r := csv.NewReader(c.ReadFile)
+	//Fix csv issue with mac cr with macreader
+	r := csv.NewReader(macreader.New(c.ReadFile))
 
 	//Read the first row
 	firstRow, err := r.Read()
