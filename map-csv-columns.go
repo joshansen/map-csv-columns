@@ -29,7 +29,7 @@ func (c *Converter) SetInput(input io.Reader) {
 
 //Sets Converter Output
 func (c *Converter) SetOutput(output io.Reader) {
-	c.Output = input
+	c.Output = output
 }
 
 //Sets Converter Input by opening a file with filname.
