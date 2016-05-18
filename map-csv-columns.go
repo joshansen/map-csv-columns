@@ -28,7 +28,7 @@ func (c *Converter) SetInput(input io.Reader) {
 }
 
 //Sets Converter Output
-func (c *Converter) SetOutput(output io.Reader) {
+func (c *Converter) SetOutput(output io.Writer) {
 	c.Output = output
 }
 
