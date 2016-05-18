@@ -37,6 +37,7 @@ func (c *Converter) setReadFile(filename string) error {
 	c.ReadFile = macreader.New(file)
 	return nil
 }
+
 //Sets WriteFile on converter given a file name.
 func (c *Converter) setWriteFile(filename string) error {
 	file, err := os.Create(filename)
@@ -83,7 +84,7 @@ func (c *Converter) Convert() error {
 
 	//if fields in FieldMap weren't present, return the fields' name
 	if len(missingFieldList) > 0 {
-		return fmt.Errorf("could not find column(s) named %s in csv header", strings.Join(missingFieldList, ", "))
+		return fmt.Errorf("could not find the following column name(s) in the csv header.:\n\t%s\n", strings.Join(missingFieldList, "\n\t"))
 	}
 
 	//append the first row
