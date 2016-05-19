@@ -89,7 +89,7 @@ func (c *Converter) Convert() error {
 
 	//if fields in FieldMap weren't present, return the fields' name
 	if len(missingFieldList) > 0 {
-		return fmt.Errorf("could not find the following column name(s) in the csv header.:\n\t%s\n", strings.Join(missingFieldList, "\n\t"))
+		return fmt.Errorf("could not find the following column name(s) in the csv header:\n\t%s\n", strings.Join(missingFieldList, "\n\t"))
 	}
 
 	//append the first row
