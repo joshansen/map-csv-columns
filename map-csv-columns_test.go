@@ -1,10 +1,10 @@
 package mapCSVColumns
 
 import (
-	"testing"
-	"strings"
 	"bytes"
 	"reflect"
+	"strings"
+	"testing"
 )
 
 func TestConvert(t *testing.T) {
@@ -55,7 +55,7 @@ func TestConvert(t *testing.T) {
 `
 	//This test will fail depending on sort order of the map above
 	convertedCsv := buff.String()
-	if !(expectedCsvOption1 == convertedCsv || expectedCsvOption2 == convertedCsv){
+	if !(expectedCsvOption1 == convertedCsv || expectedCsvOption2 == convertedCsv) {
 		t.Errorf("Failed Conversion:\n\tExpected %q or %q\n\tRecieved %q", expectedCsvOption1, expectedCsvOption2, convertedCsv)
 	}
 
@@ -64,12 +64,12 @@ func TestConvert(t *testing.T) {
 		"column5": "newColumn5",
 	}
 	c.fieldMap = invalidFieldMap
-	inputReader.Seek(0,0)
-	err := c.Convert();
+	inputReader.Seek(0, 0)
+	err := c.Convert()
 
 	expectedError := "could not find the following column name(s) in the csv header:\n\tcolumn5\n"
 
-	if err.Error() !=  expectedError{
+	if err.Error() != expectedError {
 		t.Errorf("Unexpected Error:\n\tExpected %q\n\tRecieved %q", expectedError, err.Error())
 	}
 }
