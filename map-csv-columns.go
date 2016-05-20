@@ -12,24 +12,24 @@ import (
 
 //The Converter type hold the field map, the input io.Reader and the output io.Writer
 type Converter struct {
-	FieldMap map[string]string
-	Input    io.Reader
-	Output   io.Writer
+	fieldMap map[string]string
+	input    io.Reader
+	output   io.Writer
 }
 
 //Creates a new converter.
 func NewConverter(FieldMap map[string]string) *Converter {
-	return &Converter{FieldMap: FieldMap}
+	return &Converter{fieldMap: FieldMap}
 }
 
 //Sets Converter Input
 func (c *Converter) SetInput(input io.Reader) {
-	c.Input = input
+	c.input = input
 }
 
 //Sets Converter Output
 func (c *Converter) SetOutput(output io.Writer) {
-	c.Output = output
+	c.output = output
 }
 
 //Sets Converter Input by opening a file with filname.
@@ -38,7 +38,7 @@ func (c *Converter) SetInputWithFilename(filename string) error {
 	if err != nil {
 		return err
 	}
-	c.Input = file
+	c.input = file
 	return nil
 }
 
@@ -48,14 +48,14 @@ func (c *Converter) SetOutputWithFilename(filename string) error {
 	if err != nil {
 		return err
 	}
-	c.Output = file
+	c.output = file
 	return nil
 }
 
 //Converts an input csv file into an output file, mapping column names given in FieldMap
 func (c *Converter) Convert() error {
 	//Fix csv issue with mac cr with macreader
-	r := csv.NewReader(macreader.New(c.Input))
+	r := csv.NewReader(macreader.New(c.input))
 
 	//Read the first row
 	firstRow, err := r.Read()
@@ -73,7 +73,7 @@ func (c *Converter) Convert() error {
 	//Loop through map looking for each key in the first row.
 	//If there are any missing fields, return an error with all missing fields.
 	//Record all columns that have been changed, delete other columns.
-	for inValue, outValue := range c.FieldMap {
+	for inValue, outValue := range c.fieldMap {
 		for columnIndex, columnName := range firstRow {
 			if columnName == inValue {
 				convertedRow = append(convertedRow, outValue)
@@ -116,7 +116,7 @@ func (c *Converter) Convert() error {
 	}
 
 	//write new csv file
-	w := csv.NewWriter(c.Output)
+	w := csv.NewWriter(c.output)
 	if err := w.WriteAll(convertedCSV); err != nil {
 		return err
 	}
